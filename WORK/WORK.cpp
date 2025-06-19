@@ -177,18 +177,31 @@ public:
   }
 };
 
+class IndexTest {
+  int arr[5]{ 5,123,43,64,765 };
+
+public:
+  int& operator[](int index) {
+    return arr[index];
+  }
+  
+};
+
 int main() {
   setlocale(0, "");
 
 
+  //IndexTest a;
+  //cout << a[2] << endl;
+  //a[2] = 100;
+  //cout << a[2] << endl;
 
-  Point a(1, 1);
-  Point b(a);
-  ++b;
-  b.Print();
-
-  b++;
-  b.Print();
+  //Point a(1, 1);
+  //Point b(a);
+  //++b;
+  //b.Print();
+  //b++;
+  //b.Print();
   /*
   Point c = a;
   a.Print();
