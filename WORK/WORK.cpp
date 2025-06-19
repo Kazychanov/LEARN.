@@ -42,13 +42,13 @@ using namespace std;
 //
 //}
 
-class Worker;
-
-class FriendTest {
-  int a = 5;
-public:
-  friend void ChangeX(Worker& value, FriendTest& test);
-};
+//class Worker;
+//
+//class FriendTest {
+//  int a = 5;
+//public:
+//  friend void ChangeX(Worker& value, FriendTest& test);
+//};
 
 class Worker {
   int age = 20;
@@ -107,34 +107,37 @@ public:
     delete[] grades;
   }
 
-  void printInfo() {
-    cout << "_______________________________________" << endl;
-    cout << "\t\t" << this << endl;
-    cout << "Имя:\t\t" << name << endl;
-    cout << "Возраст:\t" << age << endl;
-    cout << "Тип:\t\t" << type << endl;
-    if (description == nullopt)
-      cout << "Описания нет" << endl;
-    else 
-      cout << "Описание:\t" << description.value() << endl;
-    cout << "Оценки:\t\t";
-    for (int i = 0; i < size; i++) {
-      cout << grades[i] << " ";
-    }
-    cout << endl;
-    cout << "_______________________________________" << endl;
-  }
+  void printInfo();
 
-  friend void ChangeX(Worker& value, FriendTest& test);
+ /* friend void ChangeX(Worker& value, FriendTest& test);*/
 };
 
-void ChangeX(Worker& value, FriendTest& test) {
-  cout << "Введите возраст" << endl;
-  int agetest;
-  cin >> agetest;
-  test.a = 5;
-  value.age = agetest;
+void Worker::printInfo()
+{
+  cout << "_______________________________________" << endl;
+  cout << "\t\t" << this << endl;
+  cout << "Имя:\t\t" << name << endl;
+  cout << "Возраст:\t" << age << endl;
+  cout << "Тип:\t\t" << type << endl;
+  if (description == nullopt)
+    cout << "Описания\tнет" << endl;
+  else
+    cout << "Описание:\t" << description.value() << endl;
+  cout << "Оценки:\t\t";
+  for (int i = 0; i < size; i++) {
+    cout << grades[i] << " ";
+  }
+  cout << endl;
+  cout << "_______________________________________" << endl;
 }
+
+//void ChangeX(Worker& value, FriendTest& test) {
+//  cout << "Введите возраст" << endl;
+//  int agetest;
+//  cin >> agetest;
+//  test.a = 5;
+//  value.age = agetest;
+//}
 
 //class Point {
 //public:
@@ -193,7 +196,7 @@ void ChangeX(Worker& value, FriendTest& test) {
 //    return temp;
 //  }
 //};
-//
+
 //class IndexTest {
 //  int arr[5]{ 5,123,43,64,765 };
 //
@@ -204,14 +207,18 @@ void ChangeX(Worker& value, FriendTest& test) {
 //  
 //};
 
+
+
 int main() {
   setlocale(0, "");
 
+
+
   Worker id1(21, 1, nullopt, "Николай Петрович", 3);
   id1.printInfo();
-  FriendTest friendtest;
-  ChangeX(id1, friendtest);
-  id1.printInfo();
+  //FriendTest friendtest;
+  //ChangeX(id1, friendtest);
+  //id1.printInfo();
 
   //IndexTest a;
   //cout << a[2] << endl;
@@ -237,3 +244,4 @@ int main() {
   //MyClass a(1);
   //MyClass b(a);
 }
+
