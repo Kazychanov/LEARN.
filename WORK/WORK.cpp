@@ -3,53 +3,44 @@
 #include <optional>
 using namespace std;
 
-class MyClass;
-
-
-class FriendClass
-{
+class Image {
 public:
-	void takeMyClass(MyClass& etc);
+
+	void imageInfo() {
+		for (int i = 0; i < LENGHT; i++) {
+			cout << "#" <<  i << " " << pixels[i].PrintInfo() << endl;
+		}
+	}
 private:
+	class Pixel {
+	public:
+		Pixel(int r, int g, int b) {
+			this->R = r;
+			this->G = g;
+			this->B = b;
+		}
+		string PrintInfo() {
+			return "RGB:\t" + to_string(R) + "\t" + to_string(G) + "\t" + to_string(B);
+		}
+	private:
+		int R, G, B;
+	};
+	static const int LENGHT = 5;
+	Pixel pixels[LENGHT]
+	{
+	Pixel(0, 5, 4),
+	Pixel(1, 3, 6),
+	Pixel(5, 0, 7),
+	Pixel(9, 2, 4),
+	Pixel(3, 4, 1),
+
+	};
 };
-
-
-class MyClass
-{
-	friend FriendClass;
-public:
-	MyClass(int aa, int bb);
-private:
-	static int count;
-	int a;
-	int b;
-};
-MyClass::MyClass(int aa, int bb)
-{
-	this->a = aa;
-	this->b = bb;
-	count++;
-}
-int MyClass::count = 0;
-
-
-void FriendClass::takeMyClass(MyClass& classes)
-{
-	cout << "a: " << classes.a << endl;
-	cout << "b: " << classes.b << endl;
-	cout << "c: " << classes.count << endl;
-
-}
 int main() {
-  setlocale(0, "");
+	setlocale(0, "");
 
-	MyClass cs(5, 6);
-	FriendClass fc;
-	fc.takeMyClass(cs);
+	Image img;
+	img.imageInfo();
 
-	cout << "___________________________" << endl;
-
-	MyClass cs1(5, 6);
-	fc.takeMyClass(cs1);
 }
 
