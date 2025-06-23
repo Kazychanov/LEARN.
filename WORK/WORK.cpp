@@ -2,27 +2,26 @@
 #include <string>
 using namespace std;
 
-class Human {
+class A {
 public:
-	string name;
+	string mes1 = "сообщение 1";
+private:
+	string mes2 = "сообщение 2";
+protected:
+	string mes3 = "сообщение 3";
 };
 
-class Student : public Human {
-	string group = "10A";
+class B : public A {
 public:
-	string GetGroup() {
-		return group;
+	void GetInfo() {
+		cout << mes1 << endl;
+		cout << mes3 << endl;
 	}
-};
-
-class Professor : public Student {
-public:
-	string object;
 };
 
 int main() {
 	setlocale(0, "");
-	Professor pr;
-	cout<< pr.GetGroup();
+	B b;
+	b.GetInfo();
 }
 
