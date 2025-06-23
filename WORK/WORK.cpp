@@ -1,45 +1,28 @@
 ﻿#include <iostream>
 #include <string>
-#include <optional>
 using namespace std;
-
-class Cap {
-public:
-	string GeneratorColor() {
-		return color;
-	}
-private:
-	string color = "red";
-};
 
 class Human {
 public:
-	void think() {
-		brain.think();
-		inspectTheCap();
-	}
+	string name;
+};
 
-	void inspectTheCap() {
-		cout << "Моя кепка " << cap.GeneratorColor() << " цвета\n";
+class Student : public Human {
+	string group = "10A";
+public:
+	string GetGroup() {
+		return group;
 	}
-private:
-	class Brain {
-	public:
-		void think() {
-			cout << "Я думаю" << endl;
-		}
-	private:
-	};
+};
 
-	Brain brain;
-	Cap cap;
+class Professor : public Student {
+public:
+	string object;
 };
 
 int main() {
 	setlocale(0, "");
-
-	Human human;
-	human.think();
-
+	Professor pr;
+	cout<< pr.GetGroup();
 }
 
