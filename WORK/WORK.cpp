@@ -3,44 +3,56 @@
 #include <optional>
 using namespace std;
 
-class Image {
-public:
-
-	void imageInfo() {
-		for (int i = 0; i < LENGHT; i++) {
-			cout << "#" <<  i << " " << pixels[i].PrintInfo() << endl;
-		}
-	}
-private:
 	class Pixel {
 	public:
+		Pixel() {
+			this->R = 0;
+			this->G = 0;
+			this->B = 0;
+		}
+
 		Pixel(int r, int g, int b) {
 			this->R = r;
 			this->G = g;
 			this->B = b;
+			count++;
 		}
-		string PrintInfo() {
-			return "RGB:\t" + to_string(R) + "\t" + to_string(G) + "\t" + to_string(B);
+		string GetInfo() {
+			return "#" + to_string(count) + " RGB:\t" + to_string(R) + "\t" + to_string(G) + "\t" + to_string(B);
 		}
 	private:
+		static int count;
 		int R, G, B;
 	};
-	static const int LENGHT = 5;
-	Pixel pixels[LENGHT]
-	{
-	Pixel(0, 5, 4),
-	Pixel(1, 3, 6),
-	Pixel(5, 0, 7),
-	Pixel(9, 2, 4),
-	Pixel(3, 4, 1),
 
-	};
-};
+	int Pixel::count = 0;
+
 int main() {
 	setlocale(0, "");
 
-	Image img;
-	img.imageInfo();
 
+  const int LENGHT = 5;
+
+	Pixel static_arr[LENGHT];
+
+	for (int i = 0; i < LENGHT; ++i) {
+		static_arr[i] = Pixel(i, i + 1, i * 2);
+		cout << static_arr[i].GetInfo() << endl;
+	}
+
+	int size;
+	cout << "Введите количество: ";
+	cin >> size;
+	cout << endl;
+	Pixel* dinamyc_arr = new Pixel[size];
+	int r, g, b;
+	for (int i = 0; i < size; i++) {
+		cout << "Введите RGB: ";
+		cin >> r >> g >> b;
+		dinamyc_arr[i] = Pixel(r, g, b);
+	}
+	for (int i = 0; i < size; i++) {
+		cout << dinamyc_arr[i].GetInfo() << endl;
+	}
 }
 
