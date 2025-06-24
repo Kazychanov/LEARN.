@@ -4,24 +4,43 @@ using namespace std;
 
 class A {
 public:
-	string mes1 = "сообщение 1";
+	A()
+	{
+		cout << "Вызвался конструктор класса B" << endl;
+		msg = "Пустое сообщение";
+	}
+	A(string msg)
+	{
+		this->msg = msg;
+	}
+	void PrintMsg() {
+		cout << msg << endl;
+
+	}
 private:
-	string mes2 = "сообщение 2";
-protected:
-	string mes3 = "сообщение 3";
+	string msg;
 };
 
 class B : public A {
 public:
-	void GetInfo() {
-		cout << mes1 << endl;
-		cout << mes3 << endl;
+	B():A("наше новое сообщение")
+	{
+		cout << "Вызвался конструктор класса B" << endl;
+	}
+private:
+};
+
+
+class C : public B {
+	public:
+	C() {
+		cout << "Вызвался конструктор класса C" << endl;
 	}
 };
 
 int main() {
 	setlocale(0, "");
-	B b;
-	b.GetInfo();
+	B value;
+	value.PrintMsg();
 }
 
