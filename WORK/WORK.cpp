@@ -2,27 +2,40 @@
 #include <string>
 using namespace std;
 
-class Human {
+class Msg {
 public:
-	Human(string name) {
-		this->name = name;
-		this->age = 0;
-		this->wieght = 0;
+	Msg(string msg) {
+		this->msg = msg;
 	}
-	Human(string name, int age) : Human(name){
-		this->age = age;
+	virtual string GetMsg() {
+		return msg;
 	}
-	Human(string name, int age, int weight) : Human(name, age) {
-		this->wieght = weight;
-	}
-protected:
-	string name;
-	int age;
-	int wieght;
+private:
+	string msg;
 };
+
+class BraketsMsg : public Msg {
+public:
+	BraketsMsg(string msg) :Msg(msg) {
+
+	}
+	string GetMsg() override {
+		return "(" + ::Msg::GetMsg() + ")";
+	}
+};
+
+class Printer {
+public:
+	void Print(Msg* msg) {
+		cout << msg->GetMsg() << endl;
+	}
+};
+
 int main() {
 	setlocale(0, "");
 
-	Human("Дмитрий")
+	BraketsMsg m("Привет");
+	Printer p;
+	p.Print(&m);
 }
 
