@@ -2,31 +2,27 @@
 #include <string>
 using namespace std;
 
-
-class A {
-public :
-	A() {
-		cout << "Выделена динамическая память под класс А" << endl;
-	}
-	virtual ~A() {
-		cout << "Очищена динамическая память под класс А" << endl;
-	}
-};
-
-class B :public A{
+class Human {
 public:
-	B() {
-		cout << "Выделена динамическая память под класс B" << endl;
+	Human(string name) {
+		this->name = name;
+		this->age = 0;
+		this->wieght = 0;
 	}
-	~B() override{
-		cout << "Очищена динамическая память под класс B" << endl;
+	Human(string name, int age) : Human(name){
+		this->age = age;
 	}
+	Human(string name, int age, int weight) : Human(name, age) {
+		this->wieght = weight;
+	}
+protected:
+	string name;
+	int age;
+	int wieght;
 };
-
 int main() {
 	setlocale(0, "");
 
-	A* bptr = new B;
-	delete bptr;
+	Human("Дмитрий")
 }
 
