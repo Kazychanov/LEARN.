@@ -2,40 +2,31 @@
 #include <string>
 using namespace std;
 
-class Msg {
+class Car {
 public:
-	Msg(string msg) {
-		this->msg = msg;
-	}
-	virtual string GetMsg() {
-		return msg;
+	void Drive() {
+		cout << "Я еду" << endl;
 	}
 private:
-	string msg;
 };
 
-class BraketsMsg : public Msg {
+class Airplane {
 public:
-	BraketsMsg(string msg) :Msg(msg) {
-
+	void Fly() {
+		cout << "Я лечу" << endl;
 	}
-	string GetMsg() override {
-		return "(" + ::Msg::GetMsg() + ")";
-	}
+private:
 };
 
-class Printer {
-public:
-	void Print(Msg* msg) {
-		cout << msg->GetMsg() << endl;
-	}
+class FlyingCar : public Car, public Airplane{
+
 };
 
 int main() {
 	setlocale(0, "");
 
-	BraketsMsg m("Привет");
-	Printer p;
-	p.Print(&m);
+	FlyingCar fc;
+	
+	Car* car = &fc;
 }
 
