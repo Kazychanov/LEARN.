@@ -2,9 +2,14 @@
 #include <string>
 using namespace std;
 
-class Gun {
+class Weapon {
 public:
-	virtual void Shoot() {
+	virtual void Shoot() = 0;
+};
+
+class Gun :public Weapon {
+public:
+	void Shoot() override {
 		cout << "BANG!" << endl;
 	}
 };
@@ -17,19 +22,34 @@ public:
 	}
 };
 
+class Bazooka : public Weapon {
+public:
+	void Shoot() override
+	{
+		cout << "BADUUM!" << endl;
+	}
+};
+
+class Knife : public Weapon{
+public:
+	void Shoot() override
+	{
+		cout << "FHJIUTSG!" << endl;
+	}
+};
+
 class Player {
 public:
-	void Shoot(Gun *gun) {
-		gun->Shoot();
+	void Shoot(Weapon * Weapon) {
+		Weapon->Shoot();
 	}
 };
 
 int main() {
 	setlocale(0, "");
-	Gun gun;
-	SubmachineGun machineGun;
+	Knife knife;
 
 	Player player;
-	player.Shoot(&machineGun);
+	player.Shoot(&knife);
 }
 
