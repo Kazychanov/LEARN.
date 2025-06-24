@@ -2,45 +2,34 @@
 #include <string>
 using namespace std;
 
-class A {
+class Gun {
 public:
-	A()
-	{
-		cout << "Вызвался конструктор класса B" << endl;
-		msg = "Пустое сообщение";
+	virtual void Shoot() {
+		cout << "BANG!" << endl;
 	}
-	A(string msg)
-	{
-		this->msg = msg;
-	}
-	void PrintMsg() {
-		cout << msg << endl;
-
-	}
-private:
-	string msg;
 };
 
-class B : public A {
+class SubmachineGun : public Gun{
 public:
-	B():A("наше новое сообщение")
+	void Shoot() override 
 	{
-		cout << "Вызвался конструктор класса B" << endl;
+		cout << "BANG! BANG! BANG!" << endl;
 	}
-private:
 };
 
-
-class C : public B {
-	public:
-	C() {
-		cout << "Вызвался конструктор класса C" << endl;
+class Player {
+public:
+	void Shoot(Gun *gun) {
+		gun->Shoot();
 	}
 };
 
 int main() {
 	setlocale(0, "");
-	B value;
-	value.PrintMsg();
+	Gun gun;
+	SubmachineGun machineGun;
+
+	Player player;
+	player.Shoot(&machineGun);
 }
 
