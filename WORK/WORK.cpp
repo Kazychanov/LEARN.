@@ -3,9 +3,26 @@
 #include <fstream>
 using namespace std;
 
+struct MyStruct
+{
+  MyStruct() {
+    x = y = z = 0;
+  }
+  MyStruct(int x, int y, int z) {
+    this->x = x;
+    this->y = y;
+    this->z = z;
+  }
+  void Print() {
+    cout << "x: " << x << " y: " << y << " z: " << z << endl;
+  }
+  int x, y, z;
+};
 
 int main() {
   setlocale(0, "");
+
+  MyStruct ms2(10, 0, 0);
 
   string pathname = "ЯНЕГЕЙ";
   pathname += ".txt";
@@ -14,7 +31,7 @@ int main() {
 
   if (fout.is_open())
   {
-    fout << "ЯГАМИ ЛАЙТ" << endl;
+    fout.write((char*)&ms2, sizeof(MyStruct));
   }
   else {
     cout << "Ошибка открытия" << endl;
@@ -24,22 +41,10 @@ int main() {
   ifstream fin;
   fin.open(pathname);
   if (fin.is_open()) {
+    MyStruct readPoint;
 
-    //cout << "CHAR\t______________________" << endl;
-    //char ch;
-    //while (fin.get(ch)) {
-    //  cout << ch;
-    //}
-
-    //// Сбрасываем файловый указатель в начало файла
-    //fin.clear();
-    //fin.seekg(0);
-
-
-    cout << "\nSTR\t______________________" << endl; // Добавил символ новой строки для разделения вывода
-    string str;
-    while (getline(fin, str)) { // Исправленное условие цикла
-      cout << str << endl;
+    while (fin.read((char*)&readPoint, sizeof(MyStruct))) {
+      readPoint.Print();
     }
   }
   else
