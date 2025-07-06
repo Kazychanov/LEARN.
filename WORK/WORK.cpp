@@ -1,45 +1,50 @@
 ﻿#include <iostream>
 #include <string>
+#include <fstream>
 using namespace std;
 
-struct Gun
-{
-	Gun() {
-		cout << "пяу"
-	}
-	Gun(string pers){
-		cout << "Паф Паф!" << endl;
-		this->Person = pers;
-	}
-
-	string Person;
-};
-
-struct Pistol : virtual public Gun
-{
-	Pistol(string pers) /*: Gun(pers)*/ {
-		cout << "Pistol: " << this->Person << endl;
-	}
-};
-
-struct Rocket: virtual public Gun
-{
-	Rocket(string pers) /*: Gun(pers)*/ {
-		cout << "Rocket: " << this->Person << endl;
-	}
-};
-
-struct RocketPistol : public Rocket, public Pistol
-{
-	RocketPistol(string RocketPers, string PistolPers) : Rocket(RocketPers), Pistol(PistolPers) {
-		cout << "Создан ракетный пистолет" << endl;
-		cout << "Отец: " << RocketPers << endl;
-		cout << "Мать: " << PistolPers << endl;
-
-	}
-};
 
 int main() {
-	setlocale(0, "");
-	RocketPistol RK("Папа", "Мама");
+  setlocale(0, "");
+
+  string pathname = "ЯНЕГЕЙ";
+  pathname += ".txt";
+  ofstream fout;
+  fout.open(pathname, ofstream::app);
+
+  if (fout.is_open())
+  {
+    fout << "ЯГАМИ ЛАЙТ" << endl;
+  }
+  else {
+    cout << "Ошибка открытия" << endl;
+  }
+  fout.close();
+
+  ifstream fin;
+  fin.open(pathname);
+  if (fin.is_open()) {
+
+    //cout << "CHAR\t______________________" << endl;
+    //char ch;
+    //while (fin.get(ch)) {
+    //  cout << ch;
+    //}
+
+    //// Сбрасываем файловый указатель в начало файла
+    //fin.clear();
+    //fin.seekg(0);
+
+
+    cout << "\nSTR\t______________________" << endl; // Добавил символ новой строки для разделения вывода
+    string str;
+    while (getline(fin, str)) { // Исправленное условие цикла
+      cout << str << endl;
+    }
+  }
+  else
+    cout << "Ошибка открытия" << endl;
+
+  fin.close();
 }
+
