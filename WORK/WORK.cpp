@@ -2,35 +2,44 @@
 #include <string>
 using namespace std;
 
-struct IBicycle
+struct Gun
 {
-	void virtual TwistWheel() = 0;
-	void virtual Ride() = 0;
+	Gun() {
+		cout << "пяу"
+	}
+	Gun(string pers){
+		cout << "Паф Паф!" << endl;
+		this->Person = pers;
+	}
+
+	string Person;
 };
 
-struct SimpleBicycle : public IBicycle
+struct Pistol : virtual public Gun
 {
-	void TwistWheel() override {
-		cout << " Метод TwistWheel\tкласса SimpleBicycle " << endl;
-	}
-	void Ride() override {
-		cout << " Метод Ride\tкласса SimpleBicycle " << endl;
+	Pistol(string pers) /*: Gun(pers)*/ {
+		cout << "Pistol: " << this->Person << endl;
 	}
 };
 
-struct Human
+struct Rocket: virtual public Gun
 {
-	void RideOn(IBicycle & bicycle) {
-		cout << "Крутим руль." << endl;
-		bicycle.TwistWheel();
-		cout << "Поехали " << endl;
-		bicycle.Ride();
+	Rocket(string pers) /*: Gun(pers)*/ {
+		cout << "Rocket: " << this->Person << endl;
+	}
+};
+
+struct RocketPistol : public Rocket, public Pistol
+{
+	RocketPistol(string RocketPers, string PistolPers) : Rocket(RocketPers), Pistol(PistolPers) {
+		cout << "Создан ракетный пистолет" << endl;
+		cout << "Отец: " << RocketPers << endl;
+		cout << "Мать: " << PistolPers << endl;
+
 	}
 };
 
 int main() {
 	setlocale(0, "");
-	Human h;
-	SimpleBicycle sb;
-	h.RideOn(sb);
+	RocketPistol RK("Папа", "Мама");
 }
