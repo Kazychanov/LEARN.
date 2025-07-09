@@ -1,47 +1,62 @@
 ﻿#include <iostream>
-#include <string>
 #include <Windows.h>
-#include <fstream>
 using namespace std;
 
-class MyException : public exception {
-public:
-	MyException(const char* msg, int value) : exception(msg) {
-		this->dataValue = value;
-	}
-  int GetDataValue()  {
-		return dataValue;
-	}
-private:
-	int dataValue = 0;
-};
+namespace space1 {
+	struct MyStruct
+	{
+		int a = 4;
+	};
+}
 
-void FOO(int value) {
-	if (value < 0)
-		throw exception("Число меньше 0");
-	else if (value > 10)
-		throw MyException("Число больше 10", value);
-	else
-  cout << "Переменная " << value << endl;
+namespace space2
+{
+	struct MyStruct
+	{
+		enum DAY {
+			MONDAY,
+			TUESDAY,
+			WEDNESDAY,
+			THURSDAY,
+			FRIDAY,
+			SATURDAY,
+			SUNDAY
+		};
+
+		int a = 5;
+	};
 }
 
 int main() {
-  SetConsoleCP(1251);
-  SetConsoleOutputCP(1251);
-	try
+	space1::MyStruct ms1;
+	space2::MyStruct::DAY today = space2::MyStruct::DAY::MONDAY;
+	switch (today)
 	{
-		FOO(15);
-	}
-	catch ( MyException & ex) {
-		cout << ex.what() << endl << ex.GetDataValue() << endl;
-	}
-	catch (const exception & ex)
-	{
-		cout << ex.what() << endl;
+	case 0:
+		cout << "MONDAY " << endl;
+		break;
+	case 1:
+		cout << "TUESDAY" << endl;
+		break;
+	case 2:
+		cout << "WEDNESDAY " << endl;
+		break;
+	case 3:
+		cout << "THURSDAY" << endl;
+		break;
+	case 4:
+		cout << "FRIDAY" << endl;
+		break;
+	case 5:
+		cout << "SATURDAY" << endl;
+		break;
+	case 6:
+		cout << "SUNDAY" << endl;
+		break;
+	default:
+		break;
 	}
 
-
-
-  return 0;
+	return 0;
 }
 
