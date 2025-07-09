@@ -1,49 +1,63 @@
 ﻿#include <iostream>
 #include <string>
 #include <fstream>
-#include <Windows.h>
 using namespace std;
 
+struct MyStruct
+{
+  MyStruct() {
+    x = y = z = 0;
+  }
+  MyStruct(int x, int y, int z) {
+    this->x = x;
+    this->y = y;
+    this->z = z;
+  }
+  void Print() {
+    cout << "x: " << x << " y: " << y << " z: " << z << endl;
+  }
+  int x, y, z;
+};
 
+ostream& operator << (ostream& os, const MyStruct& point) {
+
+  os << point.x << " " << point.y << " " << point.z << "\n";
+  return os;
+}
+
+istream& operator >> (istream& is, MyStruct& point) {
+  is >> point.x >> point.y >> point.z;
+  return is;
+}
 
 int main() {
-  SetConsoleOutputCP(1251);
+  setlocale(0, "");
 
+  MyStruct ms2(10, 15, 9);
+  MyStruct ms3;
 
+  /* cout << ms2;*/
 
-  string path = "File.txt";
+  string pathname = "ЯНЕГЕЙ";
+  pathname += ".txt";
 
   fstream fs;
-  fs.open(path, fstream::in | fstream::out | fstream::app);
-  if (!fs.is_open()) {
-    cout << "Ошибка открытия папки" << endl;
-  }
+  fs.open(pathname, fstream::in | fstream::out | fstream::app);
+
+  if (!fs.is_open())
+    cout << "Ошибка открытия файла!" << endl;
   else {
+    fs << ms2;
+    fs.seekg(0);
     while (true) {
-      cout << "Нажмите 1 для записи данных в файл" << endl;
-      cout << "Нажмите 2 для чтения данных файлa" << endl;
-      int value;
-      cin >> value;
-      fs.seekg(0);
-      string str;
-      switch (value)
-      {
-      case 1:
-        SetConsoleCP(1251);
-        cout << "Введите данные";
-        cin >> str;
-        fs << endl << str << endl;
-        SetConsoleCP(866);
+      fs >> ms3;
+      if (fs.eof()) {
         break;
-      case 2:
-        while (!fs.eof()) {
-          str = "";
-          fs >> str;
-          cout << str << endl;
-        }
       }
+      cout << ms3;
     }
   }
-  fs.close();
+
+  return 0;
 }
 
