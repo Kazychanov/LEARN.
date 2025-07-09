@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <string>
+#include <Windows.h>
 #include <fstream>
 using namespace std;
 
@@ -31,33 +32,27 @@ istream& operator >> (istream& is, MyStruct& point) {
 }
 
 int main() {
-  setlocale(0, "");
+  SetConsoleCP(1251);
+  SetConsoleOutputCP(1251);
 
-  MyStruct ms2(10, 15, 9);
-  MyStruct ms3;
-
-  /* cout << ms2;*/
-
-  string pathname = "ЯНЕГЕЙ";
-  pathname += ".txt";
+  string path = "test123.txt";
 
   fstream fs;
-  fs.open(pathname, fstream::in | fstream::out | fstream::app);
-
-  if (!fs.is_open())
-    cout << "Ошибка открытия файла!" << endl;
-  else {
-    fs << ms2;
-    fs.seekg(0);
-    while (true) {
-      fs >> ms3;
-      if (fs.eof()) {
-        break;
-      }
-      cout << ms3;
-    }
+  fs.exceptions(fstream::badbit | fstream::failbit);
+  
+  try
+  {
+    cout << "открытие файла" << endl;
+    fs.open(path, fstream::in | fstream::out | fstream::app);
+    cout << "файл открыт" << endl;
   }
-
+  catch (const fstream::failure & ex)
+  {
+    cout << ex.what() << endl;
+    cout << ex.code() << endl;
+    cout << "ошибка открытия файла" << endl;
+  }
+  fs.close();
   return 0;
 }
 
