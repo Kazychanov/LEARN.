@@ -2,60 +2,41 @@
 #include <Windows.h>
 using namespace std;
 
-namespace space1 {
-	struct MyStruct
-	{
-		int a = 4;
-	};
-}
-
-namespace space2
+struct Point
 {
-	struct MyStruct
-	{
-		enum DAY {
-			MONDAY,
-			TUESDAY,
-			WEDNESDAY,
-			THURSDAY,
-			FRIDAY,
-			SATURDAY,
-			SUNDAY
-		};
+	Point() {
+		x = y = z = 0;
+	}
+	Point(int x, int y, int z) {
+		this->x = x;
+		this->y = y;
+		this->z = z;
+	}
+	int x, y, z;
+};
 
-		int a = 5;
-	};
-}
+template<typename T1, typename T2>
+struct MyStruct
+{
+	MyStruct(T1 value1, T2 value2) {
+		this->value1 = value1;
+		this->value2 = value2;
+	}
+	void  DataTypeSize() {
+		cout << sizeof(value1) << endl;
+		cout << sizeof(value2) << endl;
+	}
+private:
+	T1 value1;
+	T2 value2;
+};
 
 int main() {
-	space1::MyStruct ms1;
-	space2::MyStruct::DAY today = space2::MyStruct::DAY::MONDAY;
-	switch (today)
-	{
-	case 0:
-		cout << "MONDAY " << endl;
-		break;
-	case 1:
-		cout << "TUESDAY" << endl;
-		break;
-	case 2:
-		cout << "WEDNESDAY " << endl;
-		break;
-	case 3:
-		cout << "THURSDAY" << endl;
-		break;
-	case 4:
-		cout << "FRIDAY" << endl;
-		break;
-	case 5:
-		cout << "SATURDAY" << endl;
-		break;
-	case 6:
-		cout << "SUNDAY" << endl;
-		break;
-	default:
-		break;
-	}
+	Point a(5, 3, 6);
+
+
+	MyStruct<Point, int> ms1(a, 4);
+	ms1.DataTypeSize();
 
 	return 0;
 }
