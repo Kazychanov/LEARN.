@@ -15,44 +15,37 @@ struct Point
 	int x, y, z;
 };
 
-template<typename T1, typename T2>
-struct MyStruct
+ostream& operator <<(ostream& os, const Point& p) {
+	os << p.x << " " << p.y << " " << p.z << endl;
+	return os;
+}
+
+template<class T>
+struct Sptr
 {
-	MyStruct(T1 value1, T2 value2) {
-		this->value1 = value1;
-		this->value2 = value2;
+	Sptr(T *ptr) {
+		this->ptr = ptr;
 	}
-	void  DataTypeSize() {
-		cout << sizeof(value1) << endl;
-		cout << sizeof(value2) << endl;
+	~Sptr()
+	{
+		delete ptr;
+		this->ptr = nullptr;
+	}
+	T& operator *() {
+		return *ptr;
 	}
 private:
-	T1 value1;
-	T2 value2;
-};
-
-template<typename Т2>
-struct MyStruct<string, Т2>
-{
-	MyStruct(string str1, Т2 str2) : value1(str1), value2(str2) {}
-		string value1;
-		Т2 value2;
-	void DataTypeSize() {
-		cout << sizeof(value1) << endl;
-		cout << sizeof(value2) << endl;
-	}
+	T *ptr;
 };
 
 int main() {
 
 	Point a(5, 3, 6);
 
+	Sptr<Point> spa = new Point(a);
+	cout << *spa << endl;
 
-	MyStruct<Point, int> ms1(a, 4);
-	ms1.DataTypeSize();
-
-	MyStruct<string, Point> ms2("1", a);
-	ms2.DataTypeSize();
+	cout << ((*spa).x + 1);
 	return 0;
 }
 
