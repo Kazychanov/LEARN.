@@ -47,17 +47,15 @@ int main() {
 	setlocale(0, "");
 	Point a(5,3,6);
 
-	Sptr<Point> sp(new Point(a));
-	unique_ptr<Point> up1(new Point(a)); // Corrected: Use the constructor
-
-	unique_ptr<Point> up2 = move(up1);
-	up2.swap(up1); 
-	up2.get(); //выдаёт сырой указатель
-	up2.reset(); //освобождает и переменную и указатель
-	up2.release(); //освобождает сам указатель
-
-	shared_ptr<Point> sp1(new Point(a));
-	shared_ptr<Point> sp2(sp1); //удаляется, когда остаётся последний поинтер
+	int size;
+	cout << "Введите количество символов в массиве ";
+	cin >> size;
+	cout << endl;
+	shared_ptr<int[]> ptr(new int[size]);
+	for (int i = 0; i < size; i++) {
+		ptr[i] = rand() % 10;
+		cout << ptr[i] << "\t";
+	}
 
 	return 0;
 }
