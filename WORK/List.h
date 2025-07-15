@@ -17,6 +17,37 @@ private:
   Node* End;
   int Size;
 public:
+  struct Iterator1
+  {
+    Iterator1(Node* start) : current(start) {}
+
+    T& operator*() {
+      return current->data;
+    }
+
+    bool operator == (const Iterator1& other) const {
+      return current == other.current;
+    }
+
+    bool operator!=(const Iterator1& other) const {
+      return !(*this == other);
+    }
+
+    Iterator1 operator++() {
+      if (current)
+        current = current->ptr;
+      return current;
+    }
+
+    Iterator1 operator++(T) {
+      Iterator1 temp = *this;
+      ++(*this);
+      return temp;
+    }
+  private:
+    Node* current;
+  };
+
   constexpr ForwardList() noexcept : Head(nullptr), End(nullptr), Size(0) {}
 
   constexpr ~ForwardList()
@@ -38,6 +69,7 @@ public:
     }
     ++Size;
   }
+
   constexpr void pushBack(T data)
   {
     if (!Size)
@@ -89,8 +121,8 @@ public:
     }
     if (index == Size)
     {
-        pushBack(data);
-        return true;
+      pushBack(data);
+      return true;
     }
     if (index < 0 || index > Size)
       return false;
@@ -130,6 +162,10 @@ public:
 
   Node* GetEnd() {
     return End;
+  }
+
+  Node* GetBegin() {
+    return Head;
   }
 
   T& operator [](int index) {

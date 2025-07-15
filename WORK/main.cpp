@@ -7,8 +7,13 @@ int main() {
   srand(time(0));
 
   ForwardList<int> intlist;
+  intlist.pushBack(rand() % 10);
+  intlist.pushBack(rand() % 10);
+  intlist.pushBack(rand() % 10);
 
-  cout << "--------------------------------------------------------------------" << endl;
+  intlist.printNode();
+
+  /*cout << "--------------------------------------------------------------------" << endl;
   intlist.pushBack(rand() % 10);
   intlist.pushBack(rand() % 10);
   intlist.pushBack(rand() % 10);
@@ -41,18 +46,20 @@ int main() {
   intlist.printNode();
   cout << "Последний узел:\t" << intlist.GetEnd() << endl;
   cout << "--------------------------------------------------------------------" << endl;
+   intlist.printNode();
 
-  // intlist.printNode();
-
-  //cout << "--------------------------------------------------------------------" << endl;
-  //intlist.pushBack(rand() % 10);
-  //intlist.pushBack(rand() % 10);
-  //intlist.pushBack(rand() % 10);
-  //intlist.pushBack(rand() % 10);
+  cout << "--------------------------------------------------------------------" << endl;
+  intlist.pushBack(rand() % 10);
+  intlist.pushBack(rand() % 10);
+  intlist.pushBack(rand() % 10);
+  intlist.pushBack(rand() % 10);
 
 
-  //intlist.printNode();
-  //cout << intlist[2];
+  intlist.printNode();
+  cout << intlist[2];*/
+  for (ForwardList<int>::Iterator1 rayanGay(intlist.GetBegin()); rayanGay != nullptr; rayanGay++) {
+    cout << *rayanGay << endl;
+  }
   intlist.clear();
 
   return 0;
