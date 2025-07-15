@@ -18,14 +18,29 @@ private:
   Node* End;
   int Size;
 public:
-  constexpr ForwardList() noexcept : Head(nullptr), End(nullptr), Size(0){}
+  constexpr ForwardList() noexcept : Head(nullptr), End(nullptr), Size(0) {}
 
   constexpr ~ForwardList()
   {
     clear();
   }
-
-  constexpr void pushBack(T data) {
+    
+  constexpr void pushFront(T data)
+  {
+    if (!Size)
+    {
+        Head = End = new Node(data);
+    }
+    else
+    {
+        Node* node = new Node(data);
+        node->ptr = Head;
+        Head = node;
+    }
+    ++Size;
+  }
+  constexpr void pushBack(T data) 
+  {
     if (!Size)
     {
       Head = End = new Node(data);
@@ -66,26 +81,24 @@ public:
     Size = 0;
   }
 
-  constexpr void insert(T data, int index) {
-    if (index >= 0 && index <= Size) {
-      if (!index) {
-        Head = new Node(data, Head);
-      }
-      else {
-        Node* current = Head;
-        for (int i = 1; i < index; i++) {
-          current = current->ptr;
-        }
-        current->ptr = new Node(data, current->ptr);
-        if (index == Size) {
-          End = current->ptr;
-        }
-      }
-      Size++;
+  constexpr bool insert(T data, int index) 
+  {
+    if (index == 0)
+    {
+        pushFront(data);
+        return true;
     }
-    else {
-      cout << "Недопустимый индекс для вставки." << endl;
-    }
+    if (index < 0 || index > Size)
+        return false;
+
+    Node* node = Head;
+    for (int i{0}; i != index - 1; ++i)
+        node = node->ptr;
+    Node* nodeNext = node->ptr;
+    node->ptr = new Node(data);
+    node->ptr->ptr = nodeNext;
+    ++Size;
+    return true;
   }
 
   void remove(int index) {
@@ -146,7 +159,8 @@ int main() {
   int data, number;
   cout << "Введите число и номер, после которого хотите создать узел: ";
   cin >> data >> number;
-  intlist.insert(data, number);
+  if (!intlist.insert(data, number - 1))
+      std::cout << "Вставка не удалась\n";
   intlist.printNode(); 
   cout << "Последний узел:\t" << intlist.GetEnd() << endl;
 
