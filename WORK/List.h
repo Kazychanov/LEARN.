@@ -87,18 +87,23 @@ public:
       pushFront(data);
       return true;
     }
+    if (index == Size)
+    {
+        pushBack(data);
+        return true;
+    }
     if (index < 0 || index > Size)
       return false;
 
     Node* current = Head;
     for (int i{ 0 }; i != index - 1; ++i)
       current = current->ptr;
+
     Node* nodeNext = current->ptr;
     current->ptr = new Node(data);
     current->ptr->ptr = nodeNext;
-    if (index == Size)
-      End = current->ptr;
     ++Size;
+
     return true;
   }
 
