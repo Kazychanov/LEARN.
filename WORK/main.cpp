@@ -57,9 +57,8 @@ int main() {
 
   intlist.printNode();
   cout << intlist[2];*/
-  for (ForwardList<int>::Iterator1 rayanGay(intlist.GetBegin()); rayanGay != nullptr; rayanGay++) {
-    cout << *rayanGay << endl;
-  }
+  for (auto MarselGay : intlist)
+      std::cout << MarselGay << std::endl;
   intlist.clear();
 
   return 0;
