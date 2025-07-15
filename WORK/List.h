@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream> // for printNode
 using namespace std;
 
 template<class T>
@@ -24,6 +25,11 @@ public:
     T& operator*() {
       return current->data;
     }
+    
+    const T& operator*() const
+    {
+      return current->data;
+    }
 
     bool operator == (const Iterator1& other) const {
       return current == other.current;
@@ -34,7 +40,7 @@ public:
     }
 
     Iterator1 operator++() {
-      if (current)
+      if (current && current->ptr)
         current = current->ptr;
       return current;
     }
@@ -47,7 +53,11 @@ public:
   private:
     Node* current;
   };
+  
+  using const_iterator = const Iterator1;
+  using iterator = Iterator1;
 
+public:
   constexpr ForwardList() noexcept : Head(nullptr), End(nullptr), Size(0) {}
 
   constexpr ~ForwardList()
@@ -160,12 +170,28 @@ public:
     return true;
   }
 
-  Node* GetEnd() {
-    return End;
+  iterator begin() {
+    return iterator{Head};
   }
 
-  Node* GetBegin() {
-    return Head;
+  iterator end() {
+    return iterator{End};
+  }
+
+  const_iterator cbegin(){
+    return const_iterator{Head};
+  }
+
+  const_iterator cend(){
+    return const_iterator{End};
+  }
+
+  const_iterator begin() const{
+    return const_iterator{Head};
+  }
+
+  const_iterator end() const{
+    return const_iterator{End};
   }
 
   T& operator [](int index) {
