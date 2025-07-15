@@ -6,7 +6,6 @@ template<class T>
 struct List
 {
 private:
-  template <class>
   struct Node {
     Node(T data = T(), Node* ptr = nullptr) {
       this->data = data;
@@ -15,13 +14,11 @@ private:
     Node* ptr;
     T data;
   };
-  Node<T>* Head;
+  Node* Head;
+  Node* End;
   int Size;
 public:
-  List<T>() {
-    this->Size = 0;
-    this->Head = nullptr;
-  }
+  List<T>() :Head(nullptr), End(nullptr), Size(0){}
 
   ~List<T>()
   {
@@ -29,23 +26,22 @@ public:
   }
 
   void pushBack(T data) {
-    if (Head == nullptr) {
-      this->Head = new Node<T>(data);
+    if (!Size)
+    {
+      Head = End = new Node(data);
     }
     else
     {
-      Node<T>* current = Head;
-      while (current->ptr != nullptr) {
-        current = current->ptr;
-      }
-      current->ptr = new Node<T>(data);
+      End->ptr = new Node(data);
+      End = End->ptr;
+      End->ptr = nullptr;
     }
-    this->Size++;
+    ++Size;
 
   }
 
   void printNode() {
-    Node<T>* current = Head;
+    Node* current = Head;
     int i = 1;
     while (current != nullptr) {
       cout << "Номер: " << i << endl;
@@ -58,8 +54,8 @@ public:
 
   void clear() {
     if (Head != nullptr) {
-      Node<T>* current = Head;
-      Node<T>* nextptr = nullptr;
+      Node* current = Head;
+      Node* nextptr = nullptr;
       while (current->ptr != nullptr) {
         nextptr = current->ptr;
         delete current;
@@ -72,15 +68,18 @@ public:
 
   void insert(T data, int index) {
     if (index >= 0 && index <= Size) {
-      if (index == 0) {
-        Head = new Node<T>(data, Head);
+      if (!index) {
+        Head = new Node(data, Head);
       }
       else {
-        Node<T>* current = Head;
+        Node* current = Head;
         for (int i = 1; i < index; i++) {
           current = current->ptr;
         }
-        current->ptr = new Node<T>(data, current->ptr);
+        current->ptr = new Node(data, current->ptr);
+        if (index == Size) {
+          End = current->ptr;
+        }
       }
       Size++;
     }
@@ -92,26 +91,31 @@ public:
   void remove(int index) {
     if (index > 0 && index <= Size) {
       if (index == 1) {
-        Node<T>* nextptr = Head->ptr;
+        Node* nextptr = Head->ptr;
         delete Head;
         Head = nextptr;
       }
       else {
-        Node<T>* current = Head;
+        Node* current = Head;
         for (int i = 1; i < index; i++) {
           current = current->ptr;
         }
-        Node<T>* nextptr = current->ptr;
-        current->ptr = nextptr->ptr;
-        delete nextptr;
+        delete current->ptr;
+        current->ptr = nullptr;
+        if (index = Size)
+        End = current;
       }
+      Size--;
     }
-    Size--;
     cout << "недопустимый индекс для удаления" << endl;
   }
 
+  Node* GetEnd() {
+    return End;
+  }
+
   T& operator [](const int index) {
-    Node<T>* current = Head;
+    Node* current = Head;
     int counter = 0;
     while (current != nullptr) {
       if (counter == index)
@@ -128,11 +132,13 @@ int main() {
   srand(time(0));
 
   List<int> intlist;
-  intlist.pushBack(1);
-  intlist.pushBack(2);
-  intlist.pushBack(3);
-  intlist.pushBack(4);
+
+  cout << "--------------------------------------------------------------------" << endl;
+  intlist.pushBack(rand() % 10);
+  intlist.pushBack(rand() % 10);
+  intlist.pushBack(rand() % 10);
   intlist.printNode();
+  cout << "Последний узел:\t" << intlist.GetEnd() << endl;
 
   cout << "--------------------------------------------------------------------" << endl;
 
@@ -140,11 +146,19 @@ int main() {
   cout << "Введите число и номер, после которого хотите создать узел: ";
   cin >> data >> number;
   intlist.insert(data, number);
+  intlist.printNode(); 
+  cout << "Последний узел:\t" << intlist.GetEnd() << endl;
+
+  int deletenum;
+  cout << "Введите номер, который хотите удалить: ";
+  cin >> deletenum;
+  intlist.remove(deletenum);
   intlist.printNode();
-  intlist.remove(number);
+  cout << "Последний узел:\t" << intlist.GetEnd() << endl;
+ /* intlist.remove(number);
   cout << "--------------------------------------------------------------------" << endl;
 
-  intlist.printNode();
+  intlist.printNode();*/
 
   intlist.clear();
   //cout << "--------------------------------------------------------------------" << endl;
