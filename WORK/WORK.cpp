@@ -1,9 +1,9 @@
 ﻿#include <iostream>
-#include <ctime>
+// #include <ctime>
 using namespace std;
 
 template<class T>
-struct List
+struct ForwardList
 {
 private:
   struct Node {
@@ -18,14 +18,14 @@ private:
   Node* End;
   int Size;
 public:
-  List<T>() :Head(nullptr), End(nullptr), Size(0){}
+  constexpr ForwardList() noexcept : Head(nullptr), End(nullptr), Size(0){}
 
-  ~List<T>()
+  constexpr ~ForwardList()
   {
     clear();
   }
 
-  void pushBack(T data) {
+  constexpr void pushBack(T data) {
     if (!Size)
     {
       Head = End = new Node(data);
@@ -37,36 +37,36 @@ public:
       End->ptr = nullptr;
     }
     ++Size;
-
   }
 
-  void printNode() {
-    Node* current = Head;
+  constexpr void printNode() const {
+    const Node* current = Head;
     int i = 1;
-    while (current != nullptr) {
+    while (current) {
       cout << "Номер: " << i << endl;
       cout << "Адрес:\t" << current << "\tЗначение:\t" << current->data << endl;
-      i++;
+      ++i;
       current = current->ptr;
     }
     cout << "\nСписок окончен.\t\t" << "\tЭлементов\t" << Size << endl;
   }
 
-  void clear() {
-    if (Head != nullptr) {
+  constexpr void clear() {
+    if (Head) {
       Node* current = Head;
       Node* nextptr = nullptr;
-      while (current->ptr != nullptr) {
+      while (current->ptr) {
         nextptr = current->ptr;
         delete current;
         current = nextptr;
       }
     }
     Head = nullptr;
+    End = nullptr;
     Size = 0;
   }
 
-  void insert(T data, int index) {
+  constexpr void insert(T data, int index) {
     if (index >= 0 && index <= Size) {
       if (!index) {
         Head = new Node(data, Head);
@@ -102,7 +102,7 @@ public:
         }
         delete current->ptr;
         current->ptr = nullptr;
-        if (index = Size)
+        if (index == Size)
         End = current;
       }
       Size--;
@@ -114,15 +114,16 @@ public:
     return End;
   }
 
-  T& operator [](const int index) {
+  T& operator [](int index) {
     Node* current = Head;
     int counter = 0;
-    while (current != nullptr) {
+    while (current) {
       if (counter == index)
         return current->data;
       current = current->ptr;
       counter++;
     }
+    return *current;
   }
 };
 
@@ -131,7 +132,7 @@ int main() {
   setlocale(0, "");
   srand(time(0));
 
-  List<int> intlist;
+  ForwardList<int> intlist;
 
   cout << "--------------------------------------------------------------------" << endl;
   intlist.pushBack(rand() % 10);
