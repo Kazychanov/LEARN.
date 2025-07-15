@@ -95,6 +95,13 @@ public:
     ++Size;
   }
 
+  constexpr void popFront() {
+    Node* nextptr = Head->ptr;
+    delete Head;
+    Head = nextptr;
+    --Size;
+  }
+
   constexpr void printNode() const {
     const Node* current = Head;
     int i = 1;
@@ -149,19 +156,60 @@ public:
     return true;
   }
 
+  constexpr bool insert(T data, Iterator1 Iter)
+  {
+    
+      if (Iter == Head)
+      {
+        pushFront(data);
+        return true;
+      }
+      if (Iter == End) {
+        pushBack(data);
+        return true;
+      }
+      if (!Iter)
+        return false;
+
+      Node* current = Head;
+      for (current; current != iter; current = current->ptr) {
+        if (current == iter) {
+          Node* nextptr = current->ptr;
+          current->ptr = new Node(data);
+          current->ptr->ptr = nextptr;
+          ++Size;
+          return true;
+        }
+      }
+
+  }
+
   constexpr bool remove(int index) {
     if (index == 0) {
       Node* nextptr = Head->ptr;
       delete Head;
       Head = nextptr;
+      --Size;
       return true;
     }
     if (index > Size || index < 0)
       return false;
 
+    if (index == Size) {
+      Node* current = Head;
+      for (int i{ 0 }; i != index - 1; ++i)
+        current = current->ptr;
+      Node* nextptr = current->ptr->ptr;
+      delete current->ptr;
+      current->ptr = nextptr;
+      --Size;
+      return true;
+    }
+
     Node* current = Head;
     for (int i{ 0 }; i != index - 1; ++i)
       current = current->ptr;
+    Node* nextptr = current.ptr;
     delete current->ptr;
     current->ptr = nullptr;
     if (index == Size)
@@ -170,28 +218,52 @@ public:
     return true;
   }
 
+  constexpr bool remove(Iterator1 Iter) {
+    if (Iter == Head) {
+      popFront();
+      return true;
+    }
+    if (Iter)
+      return false;
+
+    if (Iter == End) {
+      Node* current = Head;
+      for (current; current->ptr != Iter; current = current->ptr) {
+        if (current->ptr == Iter) {
+          delete End;
+          current->ptr = nullptr;
+          End = current;
+          --Size;
+          return true;
+        }
+      }
+    }
+    Node* current = Head;
+    for (current; current->ptr != Iter; current = current->ptr) {
+      if (current->ptr == Iter) {
+        Node* nextptr = current->ptr->ptr;
+        delete current->ptr;
+        current->ptr = nextptr;
+        --Size;
+        return true;
+      }
+    }
+  }
+
   iterator begin() {
     return iterator{Head};
   }
 
   iterator end() {
-    return iterator{End};
+    return iterator{End->ptr};
   }
 
-  const_iterator cbegin(){
+  const_iterator cbegin() const{
     return const_iterator{Head};
   }
 
-  const_iterator cend(){
-    return const_iterator{End};
-  }
-
-  const_iterator begin() const{
-    return const_iterator{Head};
-  }
-
-  const_iterator end() const{
-    return const_iterator{End};
+  const_iterator cend() const{
+    return const_iterator{End->ptr};
   }
 
   T& operator [](int index) {
