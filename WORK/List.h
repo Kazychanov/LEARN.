@@ -191,12 +191,12 @@ public:
 		Node* current;
 	};
 
-	Iteraror1 begin() {
+	Iterator1 begin() {
 		return Iterator1(Head);
 	}
 	
 	Iterator1 end() {
-		return Iterator(&ForwardListEnd);
+		return Iterator1(&ForwardListEnd);
 	}
 
 	using const_Iterator1 = const Iterator1;
@@ -231,7 +231,7 @@ public:
 		}
 	}
 
-	constexpr bool insert(T dat		a, Iterator1 Iter)
+	constexpr bool insert(T data, Iterator1 Iter)
 	{
 
 		if (Iter == Head)
