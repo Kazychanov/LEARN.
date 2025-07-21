@@ -9,10 +9,14 @@ int main() {
   ForwardList<int> intlist;
   intlist.pushBack(rand() % 10);
   intlist.pushBack(rand() % 10);
+  intlist.pushBack(rand() % 10);  
+  intlist.pushBack(rand() % 10);
   intlist.pushBack(rand() % 10);
 
   intlist.printNode();
 
+  intlist.remove(4);
+  intlist.printNode();
   /*cout << "--------------------------------------------------------------------" << endl;
   intlist.pushBack(rand() % 10);
   intlist.pushBack(rand() % 10);
@@ -57,8 +61,7 @@ int main() {
 
   intlist.printNode();
   cout << intlist[2];*/
-  for (auto MarselGay : intlist)
-      std::cout << MarselGay << std::endl;
+
   intlist.clear();
 
 

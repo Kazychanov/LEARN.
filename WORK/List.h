@@ -1,280 +1,265 @@
 #pragma once
-#include <iostream> // for printNode
+#include <iostream> 
+
 using namespace std;
 
 template<class T>
 struct ForwardList
 {
 private:
-  struct Node {
-    Node(T data = T(), Node* ptr = nullptr) {
-      this->data = data;
-      this->ptr = ptr;
-    }
-    Node* ptr;
-    T data;
-  };
-  Node* Head;
-  Node* End;
-  int Size;
+
+	struct Node {
+		Node(T data, Node* ptr) : data(data), ptr(ptr) {}
+		Node* ptr;
+		T data;
+	};
+
+	Node* Head;
+	Node* End;
+	static Node ForwardListEnd;
+	int Size;
 public:
-  struct Iterator1
-  {
-    Iterator1(Node* start) : current(start) {}
 
-    T& operator*() {
-      return current->data;
-    }
-    
-    const T& operator*() const
-    {
-      return current->data;
-    }
+	constexpr ForwardList() noexcept : Head(&ForwardListEnd), End(&ForwardListEnd), Size(0) {}
 
-    bool operator == (const Iterator1& other) const {
-      return current == other.current;
-    }
+	constexpr ~ForwardList()
+	{
+		clear();
+	}
 
-    bool operator!=(const Iterator1& other) const {
-      return !(*this == other);
-    }
+	constexpr void pushFront(T data)
+	{
+		if (!Size)
+		{
+			Head = End = new Node(data, &ForwardListEnd);
+		}
+		else
+		{
+			Head = new Node(data, Head);
+		}
+		++Size;
+	}
 
-    Iterator1 operator++() {
-      if (current && current->ptr)
-        current = current->ptr;
-      return current;
-    }
+	constexpr void pushBack(T data)
+	{
+		if (!Size)
+		{
+			Head = End = new Node(data, &ForwardListEnd);
+		}
+		else
+		{
+			End->ptr = new Node(data, &ForwardListEnd);
+			End = End->ptr;
+		}
+		++Size;
+	}
 
-    Iterator1 operator++(T) {
-      Iterator1 temp = *this;
-      ++(*this);
-      return temp;
-    }
-  private:
-    Node* current;
-  };
-  
-  using const_iterator = const Iterator1;
-  using iterator = Iterator1;
+	constexpr void popFront() {
+		if (!Size) return;
 
-public:
-  constexpr ForwardList() noexcept : Head(nullptr), End(nullptr), Size(0) {}
+		Node* tempNode = Head->ptr;
+		delete Head;
+		if (tempNode == &ForwardListEnd) {
+			Head = End = &ForwardListEnd;
+		}
+		else
+			Head = tempNode;
+		--Size;
+	}
 
-  constexpr ~ForwardList()
-  {
-    clear();
-  }
+	constexpr void printNode() const {
+		const Node* current = Head;
+		int i = 1;
+		while (current != &ForwardListEnd) {
+			cout << "Номер: " << i << endl;
+			cout << "Адрес:\t" << current << "\tЗначение:\t" << current->data << endl;
+			++i;
+			current = current->ptr;
+		}
+		cout << "\nСписок окончен.\t" << "Элементов\t" << Size << endl;
+		cout << "------------------------------------------------------" << endl;
+	}
 
-  constexpr void pushFront(T data)
-  {
-    if (!Size)
-    {
-      Head = End = new Node(data);
-    }
-    else
-    {
-      Node* node = new Node(data);
-      node->ptr = Head;
-      Head = node;
-    }
-    ++Size;
-  }
+	constexpr void clear() {
+		if (Head) {
+			Node* current = Head;
+			while (current != &ForwardListEnd) {
+				Node* nextptr = current->ptr;
+				delete current;
+				current = nextptr;
+			}
+			Head = End = &ForwardListEnd;
+			Size = 0;
+		}
+	}
 
-  constexpr void pushBack(T data)
-  {
-    if (!Size)
-    {
-      Head = End = new Node(data);
-    }
-    else
-    {
-      End->ptr = new Node(data);
-      End = End->ptr;
-      End->ptr = nullptr;
-    }
-    ++Size;
-  }
+	constexpr bool insert(T data, int index)
+	{
+		if (index < 0 || index > Size)
+			return false;
 
-  constexpr void popFront() {
-    Node* nextptr = Head->ptr;
-    delete Head;
-    Head = nextptr;
-    --Size;
-  }
+		if (index == 0)
+		{
+			pushFront(data);
+			return true;
+		}
+		if (index == Size)
+		{
+			pushBack(data);
+			return true;
+		}
 
-  constexpr void printNode() const {
-    const Node* current = Head;
-    int i = 1;
-    while (current) {
-      cout << "Номер: " << i << endl;
-      cout << "Адрес:\t" << current << "\tЗначение:\t" << current->data << endl;
-      ++i;
-      current = current->ptr;
-    }
-    cout << "\nСписок окончен.\t\t" << "\tЭлементов\t" << Size << endl;
-  }
+		Node* current = Head;
+		for (int i{ 0 }; i < index - 1; ++i)
+			current = current->ptr;
 
-  constexpr void clear() {
-    if (Head) {
-      Node* current = Head;
-      Node* nextptr = nullptr;
-      while (current->ptr) {
-        nextptr = current->ptr;
-        delete current;
-        current = nextptr;
-      }
-    }
-    Head = nullptr;
-    End = nullptr;
-    Size = 0;
-  }
+		current->ptr = new Node(data, current->ptr);
+		++Size;
 
-  constexpr bool insert(T data, int index)
-  {
-    if (index == 0)
-    {
-      pushFront(data);
-      return true;
-    }
-    if (index == Size)
-    {
-      pushBack(data);
-      return true;
-    }
-    if (index < 0 || index > Size)
-      return false;
+		return true;
+	}
 
-    Node* current = Head;
-    for (int i{ 0 }; i != index - 1; ++i)
-      current = current->ptr;
+	constexpr bool remove(int index) {
+		if (index >= Size || index < 0)
+			return false;
 
-    Node* nodeNext = current->ptr;
-    current->ptr = new Node(data);
-    current->ptr->ptr = nodeNext;
-    ++Size;
+		if (index == 0) {
+			popFront();
+			return true;
+		}
 
-    return true;
-  }
+		Node* current = Head;
+		for (int i{ 0 }; i < index - 1; ++i) 
+			current = current->ptr;
+		Node* toDelete = current->ptr;
+		current->ptr = toDelete->ptr; // Перелинковка
 
-  constexpr bool insert(T data, Iterator1 Iter)
-  {
-    
-      if (Iter == Head)
-      {
-        pushFront(data);
-        return true;
-      }
-      if (Iter == End) {
-        pushBack(data);
-        return true;
-      }
-      if (!Iter)
-        return false;
+		if (toDelete == End) { // Исправлено: обновление End
+			End = current;
+		}
+		delete toDelete;
+		--Size;
+		return true;
+	}
 
-      Node* current = Head;
-      for (current; current != iter; current = current->ptr) {
-        if (current == iter) {
-          Node* nextptr = current->ptr;
-          current->ptr = new Node(data);
-          current->ptr->ptr = nextptr;
-          ++Size;
-          return true;
-        }
-      }
+	//T& operator [](int index) {
+	//	if(index > Size || index < 0)
+	//	Node* current = Head;
+	//	int counter = 0;
+	//	while (current) {
+	//		if (counter == index)
+	//			return current->data;
+	//		current = current->ptr;
+	//		counter++;
+	//	}
+	//	return *current;
+	//}
 
-  }
+	struct Iterator1
+	{
+		Iterator1(Node* start) : current(start) {}
 
-  constexpr bool remove(int index) {
-    if (index == 0) {
-      Node* nextptr = Head->ptr;
-      delete Head;
-      Head = nextptr;
-      --Size;
-      return true;
-    }
-    if (index > Size || index < 0)
-      return false;
+		T& operator*() {
+			return current->data;
+		}
 
-    if (index == Size) {
-      Node* current = Head;
-      for (int i{ 0 }; i != index - 1; ++i)
-        current = current->ptr;
-      Node* nextptr = current->ptr->ptr;
-      delete current->ptr;
-      current->ptr = nextptr;
-      --Size;
-      return true;
-    }
+		const T& operator*() const
+		{
+			return current->data;
+		}
 
-    Node* current = Head;
-    for (int i{ 0 }; i != index - 1; ++i)
-      current = current->ptr;
-    Node* nextptr = current.ptr;
-    delete current->ptr;
-    current->ptr = nullptr;
-    if (index == Size)
-      End = current;
-    --Size;
-    return true;
-  }
+		bool operator == (const Iterator1& other) const {
+			return current == other.current;
+		}
 
-  constexpr bool remove(Iterator1 Iter) {
-    if (Iter == Head) {
-      popFront();
-      return true;
-    }
-    if (Iter)
-      return false;
+		bool operator!=(const Iterator1& other) const {
+			return !(*this == other);
+		}
 
-    if (Iter == End) {
-      Node* current = Head;
-      for (current; current->ptr != Iter; current = current->ptr) {
-        if (current->ptr == Iter) {
-          delete End;
-          current->ptr = nullptr;
-          End = current;
-          --Size;
-          return true;
-        }
-      }
-    }
-    Node* current = Head;
-    for (current; current->ptr != Iter; current = current->ptr) {
-      if (current->ptr == Iter) {
-        Node* nextptr = current->ptr->ptr;
-        delete current->ptr;
-        current->ptr = nextptr;
-        --Size;
-        return true;
-      }
-    }
-  }
+		Iterator1& operator++() {
+			if (current != nullptr && current != &ForwardListEnd)
+				current = current->ptr;
+			return *this;
+		}
 
-  iterator begin() {
-    return iterator{Head};
-  }
+		Iterator1 operator++(T) {
+			Iterator1 temp = *this;
+			++(*this);
+			return temp;
+		}
+	private:
+		Node* current;
+	};
 
-  iterator end() {
-    return iterator{End->ptr};
-  }
+	Iteraror1 begin() {
+		return Iterator1(Head);
+	}
+	
+	Iterator1 end() {
+		return Iterator(&ForwardListEnd);
+	}
 
-  const_iterator cbegin() const{
-    return const_iterator{Head};
-  }
+	using const_Iterator1 = const Iterator1;
 
-  const_iterator cend() const{
-    return const_iterator{End->ptr};
-  }
+	constexpr bool remove(Iterator1 Iter) {
+		if (Iter == Head) {
+			popFront();
+			return true;
+		}
+		if (Iter)
+			return false;
 
-  T& operator [](int index) {
-    Node* current = Head;
-    int counter = 0;
-    while (current) {
-      if (counter == index)
-        return current->data;
-      current = current->ptr;
-      counter++;
-    }
-    return *current;
-  }
+		if (Iter == End) {
+			Node* current = Head;
+			for (; current->ptr == Iter; current = current->ptr) {
+				delete End;
+				current->ptr = nullptr;
+				End = current;
+				--Size;
+				return true;
+			}
+		}
+		Node* current = Head;
+		for (current; current->ptr != Iter; current = current->ptr) {
+			if (current->ptr == Iter) {
+				Node* nextptr = current->ptr->ptr;
+				delete current->ptr;
+				current->ptr = nextptr;
+				--Size;
+				return true;
+			}
+		}
+	}
+
+	constexpr bool insert(T dat		a, Iterator1 Iter)
+	{
+
+		if (Iter == Head)
+		{
+			pushFront(data);
+			return true;
+		}
+		if (Iter == End) {
+			pushBack(data);
+			return true;
+		}
+		if (!Iter)
+			return false;
+
+		Node* current = Head;
+		for (current; current == Iter; current = current->ptr) {
+			Node* nextptr = current->ptr;
+			current->ptr = new Node(data);
+			current->ptr->ptr = nextptr;
+			++Size;
+			return true;
+
+		}
+	}
+
 };
+
+template<class T>
+typename ForwardList<T>::Node ForwardList<T>::ForwardListEnd = typename ForwardList<T>::Node(T(), nullptr);
+
+
