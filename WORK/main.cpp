@@ -1,70 +1,30 @@
 ﻿#include <iostream>
-#include "List.h"
+#include <thread>
+#include <chrono>
+
+
+using namespace std;
+void DoWork() {
+  for (size_t i = 0; i < 10; i++)
+  {
+    cout << this_thread::get_id() << "\tDoWork " << i << endl;
+    this_thread::sleep_for(chrono::milliseconds(1000));
+  }
+}
 
 
 int main() {
   setlocale(0, "");
-  srand(time(0));
+  cout << "START MAIN" << endl;
 
-  ForwardList<int> intlist;
-  intlist.pushBack(rand() % 10);
-  intlist.pushBack(rand() % 10);
-  intlist.pushBack(rand() % 10);  
-  intlist.pushBack(rand() % 10);
-  intlist.pushBack(rand() % 10);
+  thread th(DoWork);
+  for (size_t i = 0; i < 10; i++)
+  {
+    cout << this_thread::get_id() << "\tmain " << i << endl;
+    this_thread::sleep_for(chrono::milliseconds(500));
+  }
 
-  intlist.printNode();
-
-  intlist.remove(4);
-  intlist.printNode();
-  /*cout << "--------------------------------------------------------------------" << endl;
-  intlist.pushBack(rand() % 10);
-  intlist.pushBack(rand() % 10);
-  intlist.pushBack(rand() % 10);
-  intlist.printNode();
-  cout << "Последний узел:\t" << intlist.GetEnd() << endl;
-
-  cout << "--------------------------------------------------------------------" << endl;
-
-  int data, number;
-  cout << "Введите число и номер, после которого хотите создать узел: ";
-  cin >> data >> number;
-  cout << "--------------------------------------------------------------------" << endl;
-
-  if (!intlist.insert(data, number - 1))
-    cout << "Вставка не удалась\n";
-  intlist.printNode();
-  cout << "Последний узел:\t" << intlist.GetEnd() << endl;
-  cout << "--------------------------------------------------------------------" << endl;
-  intlist.pushBack(100);
-  intlist.printNode();
-  cout << "--------------------------------------------------------------------" << endl;
-
-  int deletenum;
-  cout << "Введите номер, который хотите удалить: ";
-  cin >> deletenum;
-  cout << "--------------------------------------------------------------------" << endl;
-
-  if (!intlist.remove(deletenum - 1))
-    cout << "Удаление не удалось\n";
-  intlist.printNode();
-  cout << "Последний узел:\t" << intlist.GetEnd() << endl;
-  cout << "--------------------------------------------------------------------" << endl;
-   intlist.printNode();
-
-  cout << "--------------------------------------------------------------------" << endl;
-  intlist.pushBack(rand() % 10);
-  intlist.pushBack(rand() % 10);
-  intlist.pushBack(rand() % 10);
-  intlist.pushBack(rand() % 10);
-
-
-  intlist.printNode();
-  cout << intlist[2];*/
-
-  intlist.clear();
-
-
-
+  
+  th.join();
   return 0;
 }
