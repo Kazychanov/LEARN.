@@ -5,9 +5,9 @@
 using namespace std;
 
 template<class T>
-concept default_initializable = std::default_initializable<T>;
+concept default_initializable = std::default_initializable<T>/* && requires*/;
 
-template<typename T>
+template<class T>
 struct ForwardList
 {
 private:
@@ -15,12 +15,20 @@ private:
     Node(T data, Node* ptr) : data(data), ptr(ptr) {}
     Node* ptr;
     T data;
+
+    constexpr bool operator <(const Node& other) const {
+      return this->data < other.data;
+    }
+    constexpr bool operator >(const Node& other) const {
+      return this->data > other.data;
+    }
   };
 
   Node* Head;
   Node* End;
-  static const inline Node ForwardListEnd{ T(), nullptr }; // Инициализация статического элемента
+  static const Node ForwardListEnd{ T(), nullptr }; // Инициализация статического элемента
   int Size;
+
 public:
   ForwardList() noexcept : Head(&ForwardListEnd), End(&ForwardListEnd), Size(0) {}
 
